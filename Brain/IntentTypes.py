@@ -16,7 +16,7 @@ class IntentTypes(Enum):
     GREETING = "greeting"
 
     # =====================================
-    # Identidade da A.R.G.
+    # Identidade do A.R.G.O.S.
     # =====================================
 
     ASK_AI_NAME = "ask_ai_name"

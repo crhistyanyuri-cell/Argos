@@ -37,7 +37,44 @@ class TestIntentDetector(unittest.TestCase):
         )
 
     # =====================================
-    # Identidade da A.R.G.
+    # Normalização
+    # =====================================
+
+    def test_uppercase(self):
+
+        result = self.detector.detect(
+            "OLÁ"
+        )
+
+        self.assertEqual(
+            result,
+            IntentTypes.GREETING
+        )
+
+    def test_extra_spaces(self):
+
+        result = self.detector.detect(
+            "   bom    dia   "
+        )
+
+        self.assertEqual(
+            result,
+            IntentTypes.GREETING
+        )
+
+    def test_without_accents(self):
+
+        result = self.detector.detect(
+            "Qual e seu nome?"
+        )
+
+        self.assertEqual(
+            result,
+            IntentTypes.ASK_AI_NAME
+        )
+
+    # =====================================
+    # Identidade do A.R.G.O.S.
     # =====================================
 
     def test_ask_ai_name(self):
@@ -99,6 +136,17 @@ class TestIntentDetector(unittest.TestCase):
             IntentTypes.ASK_USER_NAME
         )
 
+    def test_remember_name_with_me_chamo(self):
+
+        result = self.detector.detect(
+            "Me chamo Carlos"
+        )
+
+        self.assertEqual(
+            result,
+            IntentTypes.REMEMBER_USER_NAME
+        )
+
     # =====================================
     # Aprendizado
     # =====================================
@@ -123,6 +171,21 @@ class TestIntentDetector(unittest.TestCase):
         self.assertEqual(
             result,
             IntentTypes.LEARN_FACT
+        )
+
+    # =====================================
+    # Falsos positivos
+    # =====================================
+
+    def test_not_remember_name_with_eu_sou(self):
+
+        result = self.detector.detect(
+            "Eu sou muito feliz hoje"
+        )
+
+        self.assertNotEqual(
+            result,
+            IntentTypes.REMEMBER_USER_NAME
         )
 
     # =====================================
@@ -168,5 +231,4 @@ class TestIntentDetector(unittest.TestCase):
 
 
 if __name__ == "__main__":
-
     unittest.main()
