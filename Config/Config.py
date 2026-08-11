@@ -2,8 +2,8 @@ class Config:
 
     def __init__(self):
 
-        self.name = "A.R.G."
-        self.version = "0.1.0"
+        self.name = "A.R.G.O.S"
+        self.version = "0.3.5"
         self.language = "pt-BR"
 
         self.debug = True

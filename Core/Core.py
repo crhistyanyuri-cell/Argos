@@ -1,3 +1,4 @@
+
 class Core:
 
     def __init__(self, manager):
@@ -91,36 +92,37 @@ class Core:
             "command_processor"
         )
 
-        brain = self.manager.get("brain")
-
-        if command_processor is None:
-
-            return
-
-        result = command_processor.process(
-            message,
-            self.manager
+        brain = self.manager.get(
+            "brain"
         )
 
-        if result is None:
+        # =====================================
+        # Processador de comandos
+        # =====================================
 
-            return
+        if command_processor is not None:
 
-        if isinstance(result, dict):
+            result = command_processor.process(
+                message,
+                self.manager
+            )
 
-            result_type = result.get("type")
+            if result is None:
 
-            if result_type == "command":
+                return
 
-                return result
+            if isinstance(result, dict):
 
-            if result_type == "message":
+                result_type = result.get("type")
 
-                if brain is not None:
+                # =================================
+                # Comando
+                # =================================
 
-                    response = brain.think(
-                        message,
-                        self.manager
+                if result_type == "command":
+
+                    response = result.get(
+                        "response"
                     )
 
                     if response:
@@ -129,7 +131,45 @@ class Core:
 
                     return response
 
-        return result
+                # =================================
+                # Mensagem normal
+                # =================================
+
+                if result_type == "message":
+
+                    if brain is not None:
+
+                        response = brain.think(
+                            message,
+                            self.manager
+                        )
+
+                        if response:
+
+                            print(response)
+
+                        return response
+
+            return result
+
+        # =====================================
+        # Fallback
+        # =====================================
+
+        if brain is not None:
+
+            response = brain.think(
+                message,
+                self.manager
+            )
+
+            if response:
+
+                print(response)
+
+            return response
+
+        return None
 
     # =====================================
     # Encerramento
@@ -145,7 +185,9 @@ class Core:
 
         self.manager.stop_all()
 
-        logger = self.manager.get("logger")
+        logger = self.manager.get(
+            "logger"
+        )
 
         if logger:
 
@@ -160,3 +202,4 @@ class Core:
     def is_running(self):
 
         return self.running
+

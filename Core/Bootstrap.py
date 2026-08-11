@@ -19,6 +19,11 @@ from Handler.QuestionHandler import QuestionHandler
 
 from Input.InputManager import InputManager
 
+from Commands.CommandProcessor import CommandProcessor
+from Commands.HelpCommand import HelpCommand
+from Commands.MemoryCommand import MemoryCommand
+from Commands.ExitCommand import ExitCommand
+
 from Brain.Brain import Brain
 
 
@@ -40,6 +45,7 @@ class Bootstrap:
         self.register_learning_modules()
         self.register_handler_modules()
         self.register_input_modules()
+        self.register_command_modules()
         self.register_brain_modules()
 
         return self.manager
@@ -160,6 +166,34 @@ class Bootstrap:
         self.manager.register(
             "input_manager",
             input_manager
+        )
+
+    # =====================================
+    # Comandos
+    # =====================================
+
+    def register_command_modules(self):
+
+        command_processor = CommandProcessor()
+
+        command_processor.register(
+            "help",
+            HelpCommand()
+        )
+
+        command_processor.register(
+            "memory",
+            MemoryCommand()
+        )
+
+        command_processor.register(
+            "sair",
+            ExitCommand()
+        )
+
+        self.manager.register(
+            "command_processor",
+            command_processor
         )
 
     # =====================================
