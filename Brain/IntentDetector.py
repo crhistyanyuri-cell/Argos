@@ -28,6 +28,7 @@ class IntentDetector:
             # =====================================
 
             IntentTypes.ASK_AI_NAME: [
+                r"\bseu nome\b",
                 r"qual.*seu nome",
                 r"como.*chama",
                 r"quem.*é você",
@@ -56,10 +57,12 @@ class IntentDetector:
                 r"meu nome é",
                 r"meu nome e",
                 r"me chamo",
-                r"pode me chamar de"
+                r"pode me chamar de",
+                r"eu sou"
             ],
 
             IntentTypes.ASK_USER_NAME: [
+                r"\bmeu nome\b",
                 r"qual.*meu nome",
                 r"como.*me chamo",
                 r"você lembra.*meu nome",
@@ -79,7 +82,6 @@ class IntentDetector:
             ],
 
             IntentTypes.LEARN_FACT: [
-                r"eu sou",
                 r"eu tenho",
                 r"eu moro",
                 r"eu faço",
@@ -97,13 +99,18 @@ class IntentDetector:
 
             return IntentTypes.UNKNOWN
 
-        message = self.normalize(message)
+        message = self.normalize(
+            message
+        )
 
         for intent, patterns in self.patterns.items():
 
             for pattern in patterns:
 
-                if re.search(pattern, message):
+                if re.search(
+                    pattern,
+                    message
+                ):
 
                     return intent
 
@@ -130,3 +137,4 @@ class IntentDetector:
         )
 
         return message
+

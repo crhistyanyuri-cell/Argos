@@ -1,3 +1,4 @@
+
 from Brain.IntentTypes import IntentTypes
 
 
@@ -9,11 +10,16 @@ class MemoryHandler:
 
         if intent == IntentTypes.REMEMBER_USER_NAME:
 
-            return self.remember_user_name(context, manager)
+            return self.remember_user_name(
+                context,
+                manager
+            )
 
         if intent == IntentTypes.ASK_USER_NAME:
 
-            return self.get_user_name(manager)
+            return self.get_user_name(
+                manager
+            )
 
         return None
 
@@ -23,27 +29,38 @@ class MemoryHandler:
 
     def remember_user_name(self, context, manager):
 
-        message = context.get("original_message")
+        message = context.get(
+            "original_message"
+        )
 
         if not message:
 
             return "Não consegui identificar seu nome."
 
-        name = self.extract_name(message)
+        name = self.extract_name(
+            message
+        )
 
         if not name:
 
             return "Não consegui identificar seu nome."
 
-        memory_manager = manager.get("memory_manager")
+        memory_manager = manager.get(
+            "memory_manager"
+        )
 
         if memory_manager is None:
 
             return "Não consegui acessar minha memória."
 
-        memory_manager.set_user_name(name)
+        memory_manager.set_user_name(
+            name
+        )
 
-        return f"Prazer, {name}! Vou lembrar do seu nome."
+        return (
+            f"Prazer, {name}! "
+            f"Vou lembrar do seu nome."
+        )
 
     # =====================================
     # Consultar nome
@@ -51,7 +68,9 @@ class MemoryHandler:
 
     def get_user_name(self, manager):
 
-        memory_manager = manager.get("memory_manager")
+        memory_manager = manager.get(
+            "memory_manager"
+        )
 
         if memory_manager is None:
 
@@ -84,14 +103,20 @@ class MemoryHandler:
 
             if prefix in message_lower:
 
-                start = message_lower.find(prefix) + len(prefix)
+                start = (
+                    message_lower.find(prefix)
+                    + len(prefix)
+                )
 
                 name = message[start:].strip()
 
-                name = name.strip(" .,!?:;")
+                name = name.strip(
+                    " .,!?:;"
+                )
 
                 if name:
 
                     return name
 
         return None
+

@@ -1,16 +1,17 @@
+
 class HelpCommand:
 
     def execute(self, args, manager):
 
-        command_manager = manager.get(
-            "command_manager"
+        command_processor = manager.get(
+            "command_processor"
         )
 
-        if command_manager is None:
+        if command_processor is None:
 
             return "Não foi possível acessar os comandos."
 
-        commands = command_manager.get_commands()
+        commands = command_processor.get_commands()
 
         if not commands:
 
@@ -22,6 +23,9 @@ class HelpCommand:
 
         for name in sorted(commands.keys()):
 
-            lines.append(f"/{name}")
+            lines.append(
+                f"/{name}"
+            )
 
         return "\n".join(lines)
+
