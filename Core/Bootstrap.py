@@ -17,7 +17,7 @@ from Handler.IdentityHandler import IdentityHandler
 from Handler.MemoryHandler import MemoryHandler
 from Handler.QuestionHandler import QuestionHandler
 
-from Input.InputManager import Input
+from Input.InputManager import InputManager
 
 from Brain.Brain import Brain
 
@@ -39,6 +39,7 @@ class Bootstrap:
         self.register_context_modules()
         self.register_learning_modules()
         self.register_handler_modules()
+        self.register_input_modules()
         self.register_brain_modules()
 
         return self.manager
@@ -51,7 +52,7 @@ class Bootstrap:
 
         config = Config()
 
-        logger = Logger()
+        logger = Logger(config)
 
         self.manager.register(
             "config",
@@ -132,27 +133,33 @@ class Bootstrap:
 
     def register_handler_modules(self):
 
-        handler_manager = HandlerManager()
-
-        handler_manager.register(
-            GreetingHandler()
-        )
-
-        handler_manager.register(
-            IdentityHandler()
-        )
-
-        handler_manager.register(
-            MemoryHandler()
-        )
-
-        handler_manager.register(
+        handlers = [
+            GreetingHandler(),
+            IdentityHandler(),
+            MemoryHandler(),
             QuestionHandler()
+        ]
+
+        handler_manager = HandlerManager(
+            handlers
         )
 
         self.manager.register(
             "handler_manager",
             handler_manager
+        )
+
+    # =====================================
+    # Input
+    # =====================================
+
+    def register_input_modules(self):
+
+        input_manager = InputManager()
+
+        self.manager.register(
+            "input_manager",
+            input_manager
         )
 
     # =====================================
