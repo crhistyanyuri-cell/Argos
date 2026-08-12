@@ -1,11 +1,24 @@
+
 class HandlerManager:
 
-    def __init__(self, handlers):
+    def __init__(self, handlers=None):
 
-        self.handlers = handlers
+        self.handlers = handlers or []
 
     # =====================================
-    # Processamento
+    # Registrar Handler
+    # =====================================
+
+    def register(self, handler):
+
+        if handler not in self.handlers:
+
+            self.handlers.append(
+                handler
+            )
+
+    # =====================================
+    # Processar
     # =====================================
 
     def process(self, context, manager):
@@ -24,31 +37,10 @@ class HandlerManager:
         return None
 
     # =====================================
-    # Adicionar Handler
-    # =====================================
-
-    def add_handler(self, handler):
-
-        self.handlers.append(handler)
-
-    # =====================================
-    # Remover Handler
-    # =====================================
-
-    def remove_handler(self, handler):
-
-        if handler in self.handlers:
-
-            self.handlers.remove(handler)
-
-            return True
-
-        return False
-
-    # =====================================
     # Listar Handlers
     # =====================================
 
     def get_handlers(self):
 
-        return self.handlers.copy()
+        return self.handlers
+

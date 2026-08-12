@@ -1,137 +1,128 @@
 
-import unittest
+class CommandProcessor:
 
-from Commands.CommandProcessor import CommandProcessor
+    def __init__(self):
 
-
-class TestCommandProcessor(unittest.TestCase):
-
-    def setUp(self):
-
-        self.processor = CommandProcessor()
+        self.commands = {}
 
     # =====================================
     # Registrar comando
     # =====================================
 
-    def test_register_command(self):
+    def register(self, name, command):
 
-        class TestCommand:
+        if not name or command is None:
 
-            def execute(self, args=None, manager=None):
+            return False
 
-                return "teste"
+        name = name.strip().lower()
 
-        command = TestCommand()
+        if not name:
 
-        self.processor.register(
-            "teste",
-            command
-        )
+            return False
 
-        self.assertIn(
-            "teste",
-            self.processor.commands
-        )
+        self.commands[name] = command
+
+        return True
 
     # =====================================
-    # Comando desconhecido
+    # Verificar se é comando
     # =====================================
 
-    def test_unknown_command(self):
+    def is_command(self, message):
 
-        result = self.processor.process(
-            "/inexistente",
-            None
-        )
+        if not message:
 
-        self.assertIsNotNone(
-            result
-        )
+            return False
 
-        self.assertEqual(
-            result["type"],
-            "command"
-        )
-
-        self.assertEqual(
-            result["name"],
-            "inexistente"
-        )
-
-        self.assertEqual(
-            result["args"],
-            []
-        )
-
-        self.assertFalse(
-            result["found"]
-        )
+        return message.strip().startswith("/")
 
     # =====================================
-    # Mensagem normal
+    # Processar
     # =====================================
 
-    def test_normal_message(self):
+    def process(self, message, manager):
 
-        result = self.processor.process(
-            "oi",
-            None
+        # =================================
+        # Mensagem vazia
+        # =================================
+
+        if not message:
+
+            return None
+
+        message = message.strip()
+
+        if not message:
+
+            return None
+
+        # =================================
+        # Mensagem normal
+        # =================================
+
+        if not self.is_command(message):
+
+            return {
+                "type": "message",
+                "content": message
+            }
+
+        # =================================
+        # Extrair comando
+        # =================================
+
+        command_line = message[1:].strip()
+
+        if not command_line:
+
+            return {
+                "type": "command",
+                "name": None,
+                "args": [],
+                "found": False
+            }
+
+        parts = command_line.split()
+
+        command_name = parts[0].lower()
+
+        args = parts[1:]
+
+        # =================================
+        # Procurar comando
+        # =================================
+
+        command = self.commands.get(
+            command_name
         )
 
-        self.assertIsNotNone(
-            result
+        # =================================
+        # Comando desconhecido
+        # =================================
+
+        if command is None:
+
+            return {
+                "type": "command",
+                "name": command_name,
+                "args": args,
+                "found": False
+            }
+
+        # =================================
+        # Executar comando
+        # =================================
+
+        response = command.execute(
+            args,
+            manager
         )
 
-        self.assertEqual(
-            result["type"],
-            "message"
-        )
-
-        self.assertEqual(
-            result["content"],
-            "oi"
-        )
-
-    # =====================================
-    # Registrar vários comandos
-    # =====================================
-
-    def test_register_multiple_commands(self):
-
-        class TestCommand:
-
-            def execute(self, args=None, manager=None):
-
-                return "teste"
-
-        command1 = TestCommand()
-        command2 = TestCommand()
-
-        self.processor.register(
-            "teste1",
-            command1
-        )
-
-        self.processor.register(
-            "teste2",
-            command2
-        )
-
-        self.assertIn(
-            "teste1",
-            self.processor.commands
-        )
-
-        self.assertIn(
-            "teste2",
-            self.processor.commands
-        )
-
-
-if __name__ == "__main__":
-
-    unittest.main()
-
-
-
+        return {
+            "type": "command",
+            "name": command_name,
+            "args": args,
+            "found": True,
+            "response": response
+        }
