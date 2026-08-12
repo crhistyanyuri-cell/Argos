@@ -30,6 +30,7 @@ class IntentTypes(Enum):
     REMEMBER_USER_NAME = "remember_user_name"
     ASK_USER_NAME = "ask_user_name"
     ASK_USER_PREFERENCE = "ask_user_preference"
+    ASK_USER_CITY = "ask_user_city"
 
     # =====================================
     # Aprendizado

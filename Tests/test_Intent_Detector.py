@@ -271,3 +271,14 @@ def test_ask_user_preference_without_accents(self):
         result,
         IntentTypes.ASK_USER_PREFERENCE
     )
+
+    def test_ask_user_city(self):
+
+        result = self.detector.detect(
+        "onde eu moro?"
+    )
+
+    self.assertEqual(
+        result,
+        IntentTypes.ASK_USER_CITY
+    )

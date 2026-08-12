@@ -29,6 +29,16 @@ class MemoryHandler:
             )
 
         # =====================================
+        # Consultar cidade
+        # =====================================
+
+        if intent == IntentTypes.ASK_USER_CITY:
+
+            return self.get_user_city(
+                manager
+            )
+
+        # =====================================
         # Consultar preferência
         # =====================================
 
@@ -101,6 +111,30 @@ class MemoryHandler:
             return "Ainda não sei seu nome."
 
         return f"Seu nome é {name}."
+
+    # =====================================
+    # Consultar cidade
+    # =====================================
+
+    def get_user_city(self, manager):
+
+        memory_manager = manager.get(
+            "memory_manager"
+        )
+
+        if memory_manager is None:
+
+            return "Não consegui acessar minha memória."
+
+        city = memory_manager.load(
+            "city"
+        )
+
+        if not city:
+
+            return "Ainda não sei onde você mora."
+
+        return f"Você mora em {city}."
 
     # =====================================
     # Consultar preferência
@@ -300,4 +334,3 @@ class MemoryHandler:
             return "general"
 
         return None
-

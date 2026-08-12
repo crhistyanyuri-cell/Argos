@@ -68,6 +68,16 @@ class IntentDetector:
                 r"voce lembra.*meu nome"
             ],
 
+            IntentTypes.ASK_USER_CITY: [
+                r"onde.*moro",
+                r"onde.*eu moro",
+                r"qual.*minha cidade",
+                r"em que cidade.*moro",
+                r"em que cidade.*eu moro",
+                r"você lembra.*onde.*moro",
+                r"voce lembra.*onde.*moro"
+            ],
+
             # =====================================
             # Consulta de preferências
             # =====================================
@@ -75,8 +85,6 @@ class IntentDetector:
             IntentTypes.ASK_USER_PREFERENCE: [
                 r"qual.*meu.*favorito",
                 r"qual.*meu.*favorita",
-                r"qual.*minha.*preferência",
-                r"qual.*minha.*preferencia",
                 r"qual.*minha.*preferência",
                 r"qual.*minha.*preferencia",
                 r"você lembra.*meu.*favorito",
