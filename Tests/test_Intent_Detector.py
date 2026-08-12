@@ -232,3 +232,42 @@ class TestIntentDetector(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+    # =====================================
+# Consulta de preferências
+# =====================================
+
+def test_ask_user_game_preference(self):
+
+    result = self.detector.detect(
+        "Qual é o meu jogo favorito?"
+    )
+
+    self.assertEqual(
+        result,
+        IntentTypes.ASK_USER_PREFERENCE
+    )
+
+
+def test_ask_user_animal_preference(self):
+
+    result = self.detector.detect(
+        "Qual é o meu animal favorito?"
+    )
+
+    self.assertEqual(
+        result,
+        IntentTypes.ASK_USER_PREFERENCE
+    )
+
+
+def test_ask_user_preference_without_accents(self):
+
+    result = self.detector.detect(
+        "Qual e o meu jogo favorito?"
+    )
+
+    self.assertEqual(
+        result,
+        IntentTypes.ASK_USER_PREFERENCE
+    )

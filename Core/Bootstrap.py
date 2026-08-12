@@ -15,6 +15,7 @@ from Handler.HandlerManager import HandlerManager
 from Handler.GreetingHandler import GreetingHandler
 from Handler.IdentityHandler import IdentityHandler
 from Handler.MemoryHandler import MemoryHandler
+from Handler.LearningHandler import LearningHandler
 from Handler.QuestionHandler import QuestionHandler
 
 from Input.InputManager import InputManager
@@ -143,6 +144,7 @@ class Bootstrap:
             GreetingHandler(),
             IdentityHandler(),
             MemoryHandler(),
+            LearningHandler(),
             QuestionHandler()
         ]
 

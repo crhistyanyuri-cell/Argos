@@ -1,3 +1,13 @@
 {
-    "user_name": "Crhistyan"
+    "user_name": "Carlos",
+    "preferences": {
+        "animal_favorito": "gato",
+        "jogo_favorito": "Dark Souls 2"
+    },
+    "facts": [
+        "eu moro no Brasil",
+        "eu tenho um gato"
+    ],
+    "age": 17,
+    "city": "Brasília"
 }

@@ -16,7 +16,7 @@ class IntentTypes(Enum):
     GREETING = "greeting"
 
     # =====================================
-    # Identidade do A.R.G.O.S.
+    # Identidade da A.R.G.O.S.
     # =====================================
 
     ASK_AI_NAME = "ask_ai_name"
@@ -29,6 +29,7 @@ class IntentTypes(Enum):
 
     REMEMBER_USER_NAME = "remember_user_name"
     ASK_USER_NAME = "ask_user_name"
+    ASK_USER_PREFERENCE = "ask_user_preference"
 
     # =====================================
     # Aprendizado

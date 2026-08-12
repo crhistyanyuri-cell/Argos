@@ -185,3 +185,34 @@ class FakeMemoryManager:
 if __name__ == "__main__":
 
     unittest.main()
+
+    # =====================================
+# Consulta de preferência
+# =====================================
+
+def test_memory_preference_handler(self):
+
+    memory_manager = self.manager.get(
+        "memory_manager"
+    )
+
+    memory_manager.set_preference(
+        "jogo_favorito",
+        "Dark Souls 2"
+    )
+
+    context = {
+        "intent": IntentTypes.ASK_USER_PREFERENCE,
+        "original_message":
+            "Qual é o meu jogo favorito?"
+    }
+
+    result = self.handler.process(
+        context,
+        self.manager
+    )
+
+    self.assertEqual(
+        result,
+        "Sua jogo favorito é Dark Souls 2."
+    )
