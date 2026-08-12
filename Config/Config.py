@@ -2,7 +2,7 @@ class Config:
 
     def __init__(self):
 
-        self.name = "A.R.G.O.S"
+        self.name = "ARGOS"
         self.version = "0.4.0"
         self.language = "pt-BR"
 
