@@ -125,3 +125,5 @@ class CommandProcessor:
             "found": True,
             "response": response
         }
+    def get_commands(self):
+        return self.commands
