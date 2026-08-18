@@ -58,14 +58,63 @@ class MemoryQuery:
     # Consulta principal
     # =====================================
 
-    def query(self, message):
+    def query(
+        self,
+        message,
+        subject=None
+    ):
 
         if not message:
+
             return None
 
         normalized = self.normalize(
             message
         )
+
+        # =================================
+        # Consulta por assunto
+        # =================================
+
+        if subject == "game":
+
+            return self.query_preference_by_key(
+                "jogo_favorito"
+            )
+
+        if subject == "animal":
+
+            return self.query_preference_by_key(
+                "animal_favorito"
+            )
+
+        if subject == "film":
+
+            return self.query_preference_by_key(
+                "filme_favorito"
+            )
+
+        if subject == "series":
+
+            return self.query_preference_by_key(
+                "serie_favorita"
+            )
+
+        if subject == "music":
+
+            return self.query_preference_by_key(
+                "musica_favorita"
+            )
+
+        if subject == "preference":
+
+            return self.query_preference_by_key(
+                "general"
+            )
+
+        if subject == "origin":
+
+            return self.query_origin()
 
         # =================================
         # Nome
@@ -112,6 +161,7 @@ class MemoryQuery:
         )
 
         if preference:
+
             return preference
 
         # =================================
@@ -123,7 +173,66 @@ class MemoryQuery:
         )
 
         if fact:
+
             return fact
+
+        return None
+
+    # =====================================
+    # Consultar preferência por chave
+    # =====================================
+
+    def query_preference_by_key(
+        self,
+        key
+    ):
+
+        preferences = (
+            self.memory_manager.get_preferences()
+        )
+
+        if not preferences:
+
+            return None
+
+        value = preferences.get(
+            key
+        )
+
+        if value is None:
+
+            return None
+
+        return {
+            "type": "preference",
+            "key": key,
+            "value": value
+        }
+
+    # =====================================
+    # Consultar origem
+    # =====================================
+
+    def query_origin(self):
+
+        facts = self.memory_manager.get_facts()
+
+        if not facts:
+
+            return None
+
+        for fact in facts:
+
+            fact_lower = fact.lower()
+
+            if fact_lower.startswith(
+                "eu sou de "
+            ):
+
+                return {
+                    "type": "fact",
+                    "value": fact
+                }
 
         return None
 
@@ -131,7 +240,10 @@ class MemoryQuery:
     # Consultar nome
     # =====================================
 
-    def is_name_query(self, message):
+    def is_name_query(
+        self,
+        message
+    ):
 
         patterns = [
             "qual meu nome",
@@ -145,6 +257,7 @@ class MemoryQuery:
         for pattern in patterns:
 
             if pattern in message:
+
                 return True
 
         return False
@@ -153,7 +266,10 @@ class MemoryQuery:
     # Consultar cidade
     # =====================================
 
-    def is_city_query(self, message):
+    def is_city_query(
+        self,
+        message
+    ):
 
         patterns = [
             "onde moro",
@@ -163,14 +279,13 @@ class MemoryQuery:
             "em que cidade moro",
             "em que cidade eu moro",
             "voce lembra onde moro",
-            "você lembra onde moro",
-            "voce sabe onde moro",
-            "voce sabe onde eu moro"
+            "voce sabe onde moro"
         ]
 
         for pattern in patterns:
 
             if pattern in message:
+
                 return True
 
         return False
@@ -179,13 +294,17 @@ class MemoryQuery:
     # Consultar preferência
     # =====================================
 
-    def query_preference(self, message):
+    def query_preference(
+        self,
+        message
+    ):
 
         preferences = (
             self.memory_manager.get_preferences()
         )
 
         if not preferences:
+
             return None
 
         # =================================
@@ -233,6 +352,7 @@ class MemoryQuery:
         for word, keys in preference_map.items():
 
             if word not in message:
+
                 continue
 
             for key in keys:
@@ -272,43 +392,23 @@ class MemoryQuery:
     # Consultar fatos
     # =====================================
 
-    def query_fact(self, message):
+    def query_fact(
+        self,
+        message
+    ):
 
         facts = self.memory_manager.get_facts()
 
         if not facts:
+
             return None
-
-        # =================================
-        # Consulta de origem
-        # =================================
-
-        if self.is_origin_query(
-            message
-        ):
-
-            for fact in facts:
-
-                fact_lower = fact.lower().strip()
-
-                if fact_lower.startswith(
-                    "eu sou de "
-                ):
-
-                    return {
-                        "type": "fact",
-                        "value": fact
-                    }
-
-        # =================================
-        # Busca genérica por palavras
-        # =================================
 
         query_words = self.extract_keywords(
             message
         )
 
         if not query_words:
+
             return None
 
         best_fact = None
@@ -332,6 +432,7 @@ class MemoryQuery:
                 best_fact = fact
 
         if best_fact is None:
+
             return None
 
         # =================================
@@ -340,6 +441,7 @@ class MemoryQuery:
         # =================================
 
         if best_score < 1:
+
             return None
 
         return {
@@ -348,34 +450,13 @@ class MemoryQuery:
         }
 
     # =====================================
-    # Identificar consulta de origem
-    # =====================================
-
-    def is_origin_query(self, message):
-
-        patterns = [
-            "de onde sou",
-            "de onde eu sou",
-            "qual minha origem",
-            "qual a minha origem",
-            "voce lembra de onde sou",
-            "voce lembra de onde eu sou",
-            "voce sabe de onde sou",
-            "voce sabe de onde eu sou"
-        ]
-
-        for pattern in patterns:
-
-            if pattern in message:
-                return True
-
-        return False
-
-    # =====================================
     # Extrair palavras importantes
     # =====================================
 
-    def extract_keywords(self, message):
+    def extract_keywords(
+        self,
+        message
+    ):
 
         words = message.split()
 
@@ -388,12 +469,16 @@ class MemoryQuery:
             )
 
             if not word:
+
                 continue
 
             if word in self.stop_words:
+
                 continue
 
-            keywords.add(word)
+            keywords.add(
+                word
+            )
 
         return keywords
 
@@ -401,7 +486,10 @@ class MemoryQuery:
     # Normalização
     # =====================================
 
-    def normalize(self, message):
+    def normalize(
+        self,
+        message
+    ):
 
         message = str(
             message
@@ -410,17 +498,23 @@ class MemoryQuery:
         message = message.lower().strip()
 
         replacements = {
+
             "á": "a",
             "à": "a",
             "ã": "a",
             "â": "a",
+
             "é": "e",
             "ê": "e",
+
             "í": "i",
+
             "ó": "o",
             "ô": "o",
             "õ": "o",
+
             "ú": "u",
+
             "ç": "c"
         }
 

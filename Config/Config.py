@@ -3,7 +3,7 @@ class Config:
     def __init__(self):
 
         self.name = "ARGOS"
-        self.version = "0.4.0"
+        self.version = "0.5"
         self.language = "pt-BR"
 
         self.debug = True
