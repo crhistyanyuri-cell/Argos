@@ -5,6 +5,7 @@ from Logger.Logger import Logger
 
 from Memory.Memory import Memory
 from Memory.MemoryManager import MemoryManager
+from Memory.MemoryQuery import MemoryQuery
 
 from Context.ContextManager import ContextManager
 
@@ -59,7 +60,9 @@ class Bootstrap:
 
         config = Config()
 
-        logger = Logger(config)
+        logger = Logger(
+            config
+        )
 
         self.manager.register(
             "config",
@@ -83,6 +86,10 @@ class Bootstrap:
             memory
         )
 
+        memory_query = MemoryQuery(
+            memory_manager
+        )
+
         self.manager.register(
             "memory",
             memory
@@ -91,6 +98,11 @@ class Bootstrap:
         self.manager.register(
             "memory_manager",
             memory_manager
+        )
+
+        self.manager.register(
+            "memory_query",
+            memory_query
         )
 
     # =====================================
@@ -141,10 +153,15 @@ class Bootstrap:
     def register_handler_modules(self):
 
         handlers = [
+
             GreetingHandler(),
+
             IdentityHandler(),
+
             MemoryHandler(),
+
             LearningHandler(),
+
             QuestionHandler()
         ]
 
