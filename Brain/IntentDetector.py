@@ -79,6 +79,19 @@ class IntentDetector:
             ],
 
             # =====================================
+            # Consulta de fatos
+            # =====================================
+
+            IntentTypes.ASK_USER_FACT: [
+                r"de onde.*sou",
+                r"de onde.*eu sou",
+                r"de onde.*venho",
+                r"qual.*minha origem",
+                r"você lembra.*de onde.*sou",
+                r"voce lembra.*de onde.*sou"
+            ],
+
+            # =====================================
             # Consulta de preferências
             # =====================================
 
@@ -110,6 +123,7 @@ class IntentDetector:
             ],
 
             IntentTypes.LEARN_FACT: [
+                r"eu sou",
                 r"eu tenho",
                 r"eu moro",
                 r"eu faço",

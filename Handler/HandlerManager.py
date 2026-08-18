@@ -1,4 +1,3 @@
-
 class HandlerManager:
 
     def __init__(self, handlers=None):
@@ -43,4 +42,3 @@ class HandlerManager:
     def get_handlers(self):
 
         return self.handlers
-

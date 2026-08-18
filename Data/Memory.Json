@@ -1,5 +1,5 @@
 {
-    "user_name": "Carlos",
+    "user_name": "Crhistyan",
     "preferences": {
         "animal_favorito": "gato",
         "jogo_favorito": "Dark Souls 2"
@@ -7,7 +7,8 @@
     "facts": [
         "eu moro no Brasil",
         "eu tenho um gato",
-        "eu moro em Brasília"
+        "eu moro em Brasília",
+        "eu sou de Minas Gerais"
     ],
     "age": 17,
     "city": "Brasília"

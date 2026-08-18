@@ -39,6 +39,17 @@ class MemoryHandler:
             )
 
         # =====================================
+        # Consultar fato
+        # =====================================
+
+        if intent == IntentTypes.ASK_USER_FACT:
+
+            return self.get_user_fact(
+                context,
+                manager
+            )
+
+        # =====================================
         # Consultar preferência
         # =====================================
 
@@ -135,6 +146,69 @@ class MemoryHandler:
             return "Ainda não sei onde você mora."
 
         return f"Você mora em {city}."
+
+    # =====================================
+    # Consultar fato
+    # =====================================
+
+    def get_user_fact(self, context, manager):
+
+        memory_manager = manager.get(
+            "memory_manager"
+        )
+
+        if memory_manager is None:
+
+            return "Não consegui acessar minha memória."
+
+        facts = memory_manager.get_facts()
+
+        if not facts:
+
+            return "Ainda não tenho essa informação."
+
+        message = context.get(
+            "original_message"
+        )
+
+        if not message:
+
+            return "Não consegui identificar o que consultar."
+
+        message_lower = message.lower()
+
+        # =================================
+        # Origem
+        # =================================
+
+        if (
+            "de onde" in message_lower
+            or "origem" in message_lower
+        ):
+
+            for fact in facts:
+
+                fact_lower = fact.lower()
+
+                if fact_lower.startswith(
+                    "eu sou de "
+                ):
+
+                    origin = fact[
+                        len("eu sou de "):
+                    ].strip()
+
+                    if origin:
+
+                        return (
+                            f"Você é de {origin}."
+                        )
+
+            return (
+                "Ainda não sei de onde você é."
+            )
+
+        return "Ainda não tenho essa informação."
 
     # =====================================
     # Consultar preferência
