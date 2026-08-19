@@ -70,9 +70,14 @@ class MemoryHandler:
                 "o que você quer consultar."
             )
 
+        subject = context.get(
+            "subject"
+)
+
         result = memory_query.query(
-            message
-        )
+            message,
+            subject
+)
 
         if result is None:
 

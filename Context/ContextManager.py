@@ -14,6 +14,7 @@ class ContextManager:
             "message": None,
             "original_message": None,
             "intent": None,
+            "subject": None,
             "last_response": None
         }
 
