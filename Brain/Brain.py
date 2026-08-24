@@ -1,4 +1,4 @@
-from Brain.IntentDetector import IntentDetector
+from MessageAnalyzer import MessageAnalyzer
 
 
 class Brain:
@@ -7,7 +7,7 @@ class Brain:
 
         self.last_thought = None
 
-        self.intent_detector = IntentDetector()
+        self.message_analyzer = MessageAnalyzer()
 
     # =====================================
     # Processamento principal
@@ -44,15 +44,23 @@ class Brain:
         )
 
         # =================================
-        # Detectar intenção
+        # Analisar mensagem
         # =================================
 
-        intent = self.intent_detector.detect(
+        analysis = self.message_analyzer.analyze(
             message
         )
 
+        intent = analysis["intent"]
+        subject = analysis["subject"]
+
         context_manager.set_intent(
             intent
+        )
+
+        context_manager.update(
+            "subject",
+            subject
         )
 
         # =================================
