@@ -2,6 +2,7 @@ import re
 
 from Brain.IntentDetector import IntentDetector
 from Brain.IntentTypes import IntentTypes
+from Brain.SemanticAnalyzer import SemanticAnalyzer
 
 
 class MessageAnalyzer:
@@ -9,6 +10,7 @@ class MessageAnalyzer:
     def __init__(self):
 
         self.intent_detector = IntentDetector()
+        self.semantic_analyzer = SemanticAnalyzer()
 
         # =====================================
         # Padrões de assuntos
@@ -134,7 +136,6 @@ class MessageAnalyzer:
     def analyze(self, message):
 
         if not message:
-
             return {
                 "intent": IntentTypes.UNKNOWN,
                 "subject": None
@@ -144,21 +145,42 @@ class MessageAnalyzer:
             message
         )
 
+        # =================================
+        # Detectar intenção
+        # =================================
+
         intent = self.intent_detector.detect(
             normalized
         )
+
+        # =================================
+        # Detectar assunto por padrões
+        # =================================
 
         subject = self.detect_subject(
             normalized
         )
 
         # =================================
+        # Análise semântica
+        # =================================
+
+        semantic = self.semantic_analyzer.analyze(
+            normalized
+        )
+
+        # Se os padrões tradicionais não
+        # encontraram o assunto, usamos
+        # a análise semântica.
+
+        if subject is None:
+            subject = semantic["subject"]
+
+        # =================================
         # Corrigir perguntas
         # =================================
 
-        if self.is_question(
-            normalized
-        ):
+        if self.is_question(normalized):
 
             if subject in (
                 "game",
@@ -168,19 +190,15 @@ class MessageAnalyzer:
                 "music",
                 "preference"
             ):
-
                 intent = IntentTypes.ASK_USER_PREFERENCE
 
             elif subject == "origin":
-
                 intent = IntentTypes.ASK_USER_FACT
 
             elif subject == "city":
-
                 intent = IntentTypes.ASK_USER_CITY
 
             elif subject == "name":
-
                 intent = IntentTypes.ASK_USER_NAME
 
         return {
@@ -202,7 +220,6 @@ class MessageAnalyzer:
                     pattern,
                     message
                 ):
-
                     return subject
 
         return None
@@ -222,7 +239,6 @@ class MessageAnalyzer:
         for word in self.question_words:
 
             if word in words:
-
                 return True
 
         return False

@@ -59,11 +59,19 @@ class ContextManager:
 
     def new_interaction(self, message):
 
+        # Guardar o assunto da interação anterior
+        previous_subject = self.context.get(
+            "subject"
+        )
+
+        # Criar novo contexto
         self.context = self.create_context()
 
         self.context["original_message"] = message
-
         self.context["message"] = message
+
+        # Preservar o assunto anterior
+        self.context["subject"] = previous_subject
 
     # =====================================
     # Definir intenção

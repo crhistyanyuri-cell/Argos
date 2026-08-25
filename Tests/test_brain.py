@@ -1,5 +1,7 @@
 import unittest
 
+from traitlets import default
+
 from Brain.Brain import Brain
 from Brain.IntentTypes import IntentTypes
 
@@ -9,16 +11,22 @@ class FakeContextManager:
     def __init__(self):
 
         self.context = {
+
             "message": None,
+
             "original_message": None,
+
             "intent": None,
+
             "response": None
         }
 
     def new_interaction(self, message):
 
         self.context["message"] = message
+
         self.context["original_message"] = message
+
         self.context["response"] = None
 
     def set_intent(self, intent):
@@ -28,6 +36,16 @@ class FakeContextManager:
     def set_response(self, response):
 
         self.context["response"] = response
+
+    def update(self, key, value):
+
+        self.context[key] = value
+
+    def get(self, key, default=None):
+        return self.context.get(
+        key,
+        default
+    )                   
 
     def get_all(self):
 

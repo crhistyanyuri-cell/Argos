@@ -6,7 +6,6 @@ class Brain:
     def __init__(self):
 
         self.last_thought = None
-
         self.message_analyzer = MessageAnalyzer()
 
     # =====================================
@@ -16,7 +15,6 @@ class Brain:
     def think(self, message, manager):
 
         if not message:
-
             return None
 
         context_manager = manager.get(
@@ -28,12 +26,20 @@ class Brain:
         )
 
         if context_manager is None:
-
             return "Erro: ContextManager não encontrado."
 
         if handler_manager is None:
-
             return "Erro: HandlerManager não encontrado."
+
+        # =================================
+        # Guardar contexto anterior
+        # =================================
+
+        previous_context = context_manager.get_all()
+
+        previous_subject = previous_context.get(
+            "subject"
+        )
 
         # =================================
         # Nova interação
@@ -53,6 +59,62 @@ class Brain:
 
         intent = analysis["intent"]
         subject = analysis["subject"]
+
+        # =================================
+        # Recuperar assunto anterior
+        # =================================
+
+        semantic = self.message_analyzer.semantic_analyzer.analyze(
+            message
+        )
+
+        if (
+            subject is None
+            and semantic["memory_related"]
+            and previous_subject is not None
+        ):
+            subject = previous_subject
+
+        # =================================
+        # Corrigir intenção após recuperar
+        # assunto
+        # =================================
+
+        if semantic["question"] and subject is not None:
+
+            if subject in (
+                "game",
+                "animal",
+                "film",
+                "series",
+                "music",
+                "preference"
+            ):
+                from Brain.IntentTypes import IntentTypes
+
+                intent = IntentTypes.ASK_USER_PREFERENCE
+
+            elif subject == "origin":
+
+                from Brain.IntentTypes import IntentTypes
+
+                intent = IntentTypes.ASK_USER_FACT
+
+            elif subject == "city":
+
+                from Brain.IntentTypes import IntentTypes
+
+                intent = IntentTypes.ASK_USER_CITY
+
+            elif subject == "name":
+
+                from Brain.IntentTypes import IntentTypes
+
+                intent = IntentTypes.ASK_USER_NAME
+
+        # =================================
+        # Atualizar contexto
+        # =================================
 
         context_manager.set_intent(
             intent
