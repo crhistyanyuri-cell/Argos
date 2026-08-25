@@ -1,4 +1,6 @@
-from .MessageAnalyzer import MessageAnalyzer
+
+from Brain.MessageAnalyzer import MessageAnalyzer
+from Brain.IntentTypes import IntentTypes
 
 
 class Brain:
@@ -70,7 +72,7 @@ class Brain:
 
         if (
             subject is None
-            and semantic["memory_related"]
+            and semantic["context_reference"]
             and previous_subject is not None
         ):
             subject = previous_subject
@@ -90,25 +92,17 @@ class Brain:
                 "music",
                 "preference"
             ):
-                from Brain.IntentTypes import IntentTypes
-
                 intent = IntentTypes.ASK_USER_PREFERENCE
 
             elif subject == "origin":
-
-                from Brain.IntentTypes import IntentTypes
 
                 intent = IntentTypes.ASK_USER_FACT
 
             elif subject == "city":
 
-                from Brain.IntentTypes import IntentTypes
-
                 intent = IntentTypes.ASK_USER_CITY
 
             elif subject == "name":
-
-                from Brain.IntentTypes import IntentTypes
 
                 intent = IntentTypes.ASK_USER_NAME
 

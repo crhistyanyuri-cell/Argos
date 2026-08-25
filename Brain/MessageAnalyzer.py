@@ -129,6 +129,50 @@ class MessageAnalyzer:
             "por que"
         }
 
+        # =====================================
+        # Perguntas curtas por assunto
+        #
+        # Permite frases como:
+        #
+        # "e o filme?"
+        # "e o jogo?"
+        # "e o animal?"
+        #
+        # =====================================
+
+        self.short_question_subjects = {
+
+            "game": [
+                "e o jogo",
+                "e jogo",
+                "jogo"
+            ],
+
+            "animal": [
+                "e o animal",
+                "e animal",
+                "animal"
+            ],
+
+            "film": [
+                "e o filme",
+                "e filme",
+                "filme"
+            ],
+
+            "series": [
+                "e a serie",
+                "e serie",
+                "serie"
+            ],
+
+            "music": [
+                "e a musica",
+                "e musica",
+                "musica"
+            ]
+        }
+
     # =====================================
     # Analisar mensagem
     # =====================================
@@ -169,18 +213,44 @@ class MessageAnalyzer:
             normalized
         )
 
-        # Se os padrões tradicionais não
-        # encontraram o assunto, usamos
-        # a análise semântica.
+        # =================================
+        # Usar análise semântica como
+        # alternativa
+        # =================================
 
         if subject is None:
             subject = semantic["subject"]
 
         # =================================
+        # Detectar pergunta
+        # =================================
+
+        question = self.is_question(
+            normalized
+        )
+
+        # =================================
+        # Pergunta curta por assunto
+        #
+        # Exemplo:
+        #
+        # "e o filme?"
+        #
+        # Não possui palavra interrogativa,
+        # mas semanticamente é uma consulta.
+        # =================================
+
+        if not question:
+            question = self.is_short_subject_question(
+                normalized,
+                subject
+            )
+
+        # =================================
         # Corrigir perguntas
         # =================================
 
-        if self.is_question(normalized):
+        if question:
 
             if subject in (
                 "game",
@@ -239,6 +309,31 @@ class MessageAnalyzer:
         for word in self.question_words:
 
             if word in words:
+                return True
+
+        return False
+
+    # =====================================
+    # Detectar pergunta curta por assunto
+    # =====================================
+
+    def is_short_subject_question(
+        self,
+        message,
+        subject
+    ):
+
+        if subject is None:
+            return False
+
+        patterns = self.short_question_subjects.get(
+            subject,
+            []
+        )
+
+        for pattern in patterns:
+
+            if message == pattern:
                 return True
 
         return False

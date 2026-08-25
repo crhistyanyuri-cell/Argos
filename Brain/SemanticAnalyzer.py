@@ -1,3 +1,4 @@
+
 import re
 
 
@@ -81,6 +82,41 @@ class SemanticAnalyzer:
         }
 
         # =====================================
+        # Perguntas relacionadas à memória
+        #
+        # Algumas frases são perguntas mesmo
+        # sem possuir uma palavra interrogativa.
+        #
+        # Exemplos:
+        #
+        # "você lembra?"
+        # "você recorda?"
+        # "você sabe?"
+        # "você esqueceu?"
+        # =====================================
+
+        self.memory_question_words = {
+            "lembra",
+            "lembrar",
+            "lembrou",
+            "lembrava",
+            "lembre",
+
+            "recorda",
+            "recordar",
+            "recordou",
+            "recordava",
+            "recorde",
+
+            "sabe",
+            "saber",
+            "sabia",
+
+            "esqueceu",
+            "esquecer"
+        }
+
+        # =====================================
         # Indicadores de memória
         # =====================================
 
@@ -89,12 +125,27 @@ class SemanticAnalyzer:
             "minha",
             "meus",
             "minhas",
+
             "lembra",
             "lembrar",
+            "lembrou",
+            "lembrava",
+            "lembre",
+
+            "recorda",
+            "recordar",
+            "recordou",
+            "recordava",
+            "recorde",
+
             "sabe",
             "saber",
-            "recorda",
-            "recordar"
+            "sabia",
+
+            "esqueceu",
+            "esquecer",
+            "esquecido",
+            "esquecida"
         }
 
         # =====================================
@@ -108,11 +159,20 @@ class SemanticAnalyzer:
             "aquele",
             "aquela",
             "aquilo",
-            "aquele",
+
             "mesmo",
             "mesma",
+
             "isso",
-            "isso",
+            "disso",
+            "dessa",
+            "desse",
+
+            "ele",
+            "ela",
+            "dele",
+            "dela",
+
             "qual"
         }
 
@@ -124,10 +184,12 @@ class SemanticAnalyzer:
             "gosto",
             "gosta",
             "gostar",
+
             "favorito",
             "favorita",
             "favoritos",
             "favoritas",
+
             "prefiro",
             "preferido",
             "preferida"
@@ -140,7 +202,6 @@ class SemanticAnalyzer:
     def analyze(self, message):
 
         if not message:
-
             return {
                 "subject": None,
                 "question": False,
@@ -166,12 +227,13 @@ class SemanticAnalyzer:
             words
         )
 
-        question = self.detect_question(
+        memory_related = self.detect_memory_relation(
             words
         )
 
-        memory_related = self.detect_memory_relation(
-            words
+        question = self.detect_question(
+            words,
+            memory_related
         )
 
         context_reference = self.detect_context_reference(
@@ -198,7 +260,6 @@ class SemanticAnalyzer:
             for word in words:
 
                 if word in concepts:
-
                     return subject
 
         return None
@@ -207,13 +268,31 @@ class SemanticAnalyzer:
     # Detectar pergunta
     # =====================================
 
-    def detect_question(self, words):
+    def detect_question(
+        self,
+        words,
+        memory_related=False
+    ):
+
+        # ---------------------------------
+        # Perguntas tradicionais
+        # ---------------------------------
 
         for word in words:
 
             if word in self.question_words:
-
                 return True
+
+        # ---------------------------------
+        # Perguntas de memória
+        # ---------------------------------
+
+        if memory_related:
+
+            for word in words:
+
+                if word in self.memory_question_words:
+                    return True
 
         return False
 
@@ -226,7 +305,6 @@ class SemanticAnalyzer:
         for word in words:
 
             if word in self.memory_words:
-
                 return True
 
         return False
@@ -247,7 +325,6 @@ class SemanticAnalyzer:
         # ---------------------------------
 
         if not question:
-
             return False
 
         # ---------------------------------
@@ -257,24 +334,23 @@ class SemanticAnalyzer:
         for word in words:
 
             if word in self.reference_words:
-
                 return True
 
         # ---------------------------------
         # Pergunta relacionada à memória
+        #
+        # Se não existe assunto explícito,
+        # significa que a pergunta provavelmente
+        # está se referindo ao assunto anterior.
         # ---------------------------------
 
         if memory_related:
 
-            # Se já existe um assunto explícito,
-            # não precisamos marcar como referência
-            # contextual.
             subject = self.detect_subject(
                 words
             )
 
             if subject is None:
-
                 return True
 
         # ---------------------------------
@@ -289,7 +365,6 @@ class SemanticAnalyzer:
             if word in self.preference_words:
 
                 has_preference = True
-
                 break
 
         if has_preference:
@@ -299,7 +374,6 @@ class SemanticAnalyzer:
             )
 
             if subject is None:
-
                 return True
 
         return False
