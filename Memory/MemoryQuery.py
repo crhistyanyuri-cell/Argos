@@ -1,3 +1,6 @@
+from email.mime import message
+
+
 class MemoryQuery:
 
     def __init__(self, memory_manager):
@@ -53,6 +56,21 @@ class MemoryQuery:
             "sobre",
             "sou"
         }
+        self.preference_map = {
+
+    "game": "jogo_favorito",
+
+    "animal": "animal_favorito",
+
+    "film": "filme_favorito",
+
+    "series": "serie_favorita",
+
+    "music": "musica_favorita",
+
+    "preference": "general"
+}
+        
 
     # =====================================
     # Consulta principal
@@ -64,13 +82,12 @@ class MemoryQuery:
         subject=None
     ):
 
-        if not message:
-
-            return None
-
-        normalized = self.normalize(
-            message
-        )
+        if message:
+            normalized = self.normalize(
+        message
+    )
+        else:
+            normalized = ""
 
         # =================================
         # Consulta por assunto

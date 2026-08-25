@@ -1,4 +1,4 @@
-from MessageAnalyzer import MessageAnalyzer
+from .MessageAnalyzer import MessageAnalyzer
 
 
 class Brain:
