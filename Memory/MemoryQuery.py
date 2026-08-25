@@ -1,6 +1,3 @@
-from email.mime import message
-
-
 class MemoryQuery:
 
     def __init__(self, memory_manager):
@@ -56,21 +53,25 @@ class MemoryQuery:
             "sobre",
             "sou"
         }
+
+        # =====================================
+        # Assunto → chave da memória
+        # =====================================
+
         self.preference_map = {
 
-    "game": "jogo_favorito",
+            "game": "jogo_favorito",
 
-    "animal": "animal_favorito",
+            "animal": "animal_favorito",
 
-    "film": "filme_favorito",
+            "film": "filme_favorito",
 
-    "series": "serie_favorita",
+            "series": "serie_favorita",
 
-    "music": "musica_favorita",
+            "music": "musica_favorita",
 
-    "preference": "general"
-}
-        
+            "preference": "general"
+        }
 
     # =====================================
     # Consulta principal
@@ -83,51 +84,32 @@ class MemoryQuery:
     ):
 
         if message:
+
             normalized = self.normalize(
-        message
-    )
+                message
+            )
+
         else:
+
             normalized = ""
 
         # =================================
         # Consulta por assunto
         # =================================
 
-        if subject == "game":
+        if subject in self.preference_map:
+
+            key = self.preference_map[
+                subject
+            ]
 
             return self.query_preference_by_key(
-                "jogo_favorito"
+                key
             )
 
-        if subject == "animal":
-
-            return self.query_preference_by_key(
-                "animal_favorito"
-            )
-
-        if subject == "film":
-
-            return self.query_preference_by_key(
-                "filme_favorito"
-            )
-
-        if subject == "series":
-
-            return self.query_preference_by_key(
-                "serie_favorita"
-            )
-
-        if subject == "music":
-
-            return self.query_preference_by_key(
-                "musica_favorita"
-            )
-
-        if subject == "preference":
-
-            return self.query_preference_by_key(
-                "general"
-            )
+        # =================================
+        # Origem
+        # =================================
 
         if subject == "origin":
 
@@ -263,11 +245,17 @@ class MemoryQuery:
     ):
 
         patterns = [
+
             "qual meu nome",
+
             "qual o meu nome",
+
             "como me chamo",
+
             "voce lembra meu nome",
+
             "voce sabe meu nome",
+
             "voce sabe o meu nome"
         ]
 
@@ -289,13 +277,21 @@ class MemoryQuery:
     ):
 
         patterns = [
+
             "onde moro",
+
             "onde eu moro",
+
             "qual minha cidade",
+
             "qual a minha cidade",
+
             "em que cidade moro",
+
             "em que cidade eu moro",
+
             "voce lembra onde moro",
+
             "voce sabe onde moro"
         ]
 
@@ -324,10 +320,6 @@ class MemoryQuery:
 
             return None
 
-        # =================================
-        # Procurar diretamente pelo tipo
-        # =================================
-
         preference_map = {
 
             "jogo": [
@@ -350,17 +342,7 @@ class MemoryQuery:
                 "serie_preferida"
             ],
 
-            "série": [
-                "serie_favorita",
-                "serie_preferida"
-            ],
-
             "musica": [
-                "musica_favorita",
-                "musica_preferida"
-            ],
-
-            "música": [
                 "musica_favorita",
                 "musica_preferida"
             ]
@@ -386,10 +368,7 @@ class MemoryQuery:
         # Preferência genérica
         # =================================
 
-        if (
-            "preferencia" in message
-            or "preferência" in message
-        ):
+        if "preferencia" in message:
 
             value = preferences.get(
                 "general"
@@ -451,11 +430,6 @@ class MemoryQuery:
         if best_fact is None:
 
             return None
-
-        # =================================
-        # Exigir pelo menos uma palavra
-        # significativa em comum
-        # =================================
 
         if best_score < 1:
 
