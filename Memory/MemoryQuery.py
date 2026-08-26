@@ -1,3 +1,4 @@
+
 class MemoryQuery:
 
     def __init__(self, memory_manager):
@@ -10,6 +11,7 @@ class MemoryQuery:
         # =====================================
 
         self.stop_words = {
+
             "o",
             "a",
             "os",
@@ -18,27 +20,32 @@ class MemoryQuery:
             "uma",
             "uns",
             "umas",
+
             "eu",
             "meu",
             "minha",
             "meus",
             "minhas",
+
             "você",
             "voce",
             "seu",
             "sua",
             "seus",
             "suas",
+
             "de",
             "do",
             "da",
             "dos",
             "das",
+
             "em",
             "no",
             "na",
             "nos",
             "nas",
+
             "é",
             "e",
             "que",
@@ -54,22 +61,13 @@ class MemoryQuery:
             "sou"
         }
 
-        # =====================================
-        # Assunto → chave da memória
-        # =====================================
-
         self.preference_map = {
 
             "game": "jogo_favorito",
-
             "animal": "animal_favorito",
-
             "film": "filme_favorito",
-
             "series": "serie_favorita",
-
             "music": "musica_favorita",
-
             "preference": "general"
         }
 
@@ -97,23 +95,53 @@ class MemoryQuery:
         # Consulta por assunto
         # =================================
 
-        if subject in self.preference_map:
-
-            key = self.preference_map[
-                subject
-            ]
+        if subject == "game":
 
             return self.query_preference_by_key(
-                key
+                "jogo_favorito"
             )
 
-        # =================================
-        # Origem
-        # =================================
+        if subject == "animal":
+
+            return self.query_preference_by_key(
+                "animal_favorito"
+            )
+
+        if subject == "film":
+
+            return self.query_preference_by_key(
+                "filme_favorito"
+            )
+
+        if subject == "series":
+
+            return self.query_preference_by_key(
+                "serie_favorita"
+            )
+
+        if subject == "music":
+
+            return self.query_preference_by_key(
+                "musica_favorita"
+            )
+
+        if subject == "preference":
+
+            return self.query_preference_by_key(
+                "general"
+            )
 
         if subject == "origin":
 
             return self.query_origin()
+
+        # =================================
+        # Cidade
+        # =================================
+
+        if subject == "city":
+
+            return self.query_city()
 
         # =================================
         # Nome
@@ -209,6 +237,25 @@ class MemoryQuery:
         }
 
     # =====================================
+    # Consultar cidade
+    # =====================================
+
+    def query_city(self):
+
+        city = self.memory_manager.load(
+            "city"
+        )
+
+        if not city:
+
+            return None
+
+        return {
+            "type": "city",
+            "value": city
+        }
+
+    # =====================================
     # Consultar origem
     # =====================================
 
@@ -247,15 +294,10 @@ class MemoryQuery:
         patterns = [
 
             "qual meu nome",
-
             "qual o meu nome",
-
             "como me chamo",
-
             "voce lembra meu nome",
-
             "voce sabe meu nome",
-
             "voce sabe o meu nome"
         ]
 
@@ -279,19 +321,12 @@ class MemoryQuery:
         patterns = [
 
             "onde moro",
-
             "onde eu moro",
-
             "qual minha cidade",
-
             "qual a minha cidade",
-
             "em que cidade moro",
-
             "em que cidade eu moro",
-
             "voce lembra onde moro",
-
             "voce sabe onde moro"
         ]
 
@@ -320,6 +355,10 @@ class MemoryQuery:
 
             return None
 
+        # =================================
+        # Procurar diretamente pelo tipo
+        # =================================
+
         preference_map = {
 
             "jogo": [
@@ -342,7 +381,17 @@ class MemoryQuery:
                 "serie_preferida"
             ],
 
+            "série": [
+                "serie_favorita",
+                "serie_preferida"
+            ],
+
             "musica": [
+                "musica_favorita",
+                "musica_preferida"
+            ],
+
+            "música": [
                 "musica_favorita",
                 "musica_preferida"
             ]
@@ -368,7 +417,10 @@ class MemoryQuery:
         # Preferência genérica
         # =================================
 
-        if "preferencia" in message:
+        if (
+            "preferencia" in message
+            or "preferência" in message
+        ):
 
             value = preferences.get(
                 "general"
@@ -430,6 +482,11 @@ class MemoryQuery:
         if best_fact is None:
 
             return None
+
+        # =================================
+        # Exigir pelo menos uma palavra
+        # significativa em comum
+        # =================================
 
         if best_score < 1:
 
@@ -517,6 +574,7 @@ class MemoryQuery:
             )
 
         for character in [
+
             "?",
             "!",
             ".",
