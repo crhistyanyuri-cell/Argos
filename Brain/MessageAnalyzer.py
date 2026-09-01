@@ -1,10 +1,7 @@
-
 import re
 
 from Brain.IntentDetector import IntentDetector
-
 from Brain.IntentTypes import IntentTypes
-
 from Brain.SemanticAnalyzer import SemanticAnalyzer
 
 
@@ -13,7 +10,6 @@ class MessageAnalyzer:
     def __init__(self):
 
         self.intent_detector = IntentDetector()
-
         self.semantic_analyzer = SemanticAnalyzer()
 
         # =====================================
@@ -23,7 +19,6 @@ class MessageAnalyzer:
         self.subject_patterns = {
 
             "name": [
-
                 r"\bmeu nome\b",
                 r"\bqual meu nome\b",
                 r"\bqual o meu nome\b",
@@ -31,11 +26,9 @@ class MessageAnalyzer:
                 r"\bque nome eu tenho\b",
                 r"\bvoce sabe meu nome\b",
                 r"\bvoce sabe o meu nome\b"
-
             ],
 
             "city": [
-
                 r"\bonde moro\b",
                 r"\bonde eu moro\b",
                 r"\bminha cidade\b",
@@ -44,21 +37,17 @@ class MessageAnalyzer:
                 r"\bem que cidade moro\b",
                 r"\bem que cidade eu moro\b",
                 r"\bvoce sabe onde moro\b"
-
             ],
 
             "origin": [
-
                 r"\bde onde (eu )?sou\b",
                 r"\bde onde (eu )?venho\b",
                 r"\bqual (e )?(a )?minha origem\b",
                 r"\bvoce sabe de onde (eu )?sou\b",
                 r"\bvoce lembra de onde (eu )?sou\b"
-
             ],
 
             "height": [
-
                 r"\bminha altura\b",
                 r"\bqual minha altura\b",
                 r"\bqual a minha altura\b",
@@ -70,11 +59,22 @@ class MessageAnalyzer:
                 r"\bvoce sabe qual minha altura\b",
                 r"\bvoce lembra minha altura\b",
                 r"\bvoce lembra qual minha altura\b"
+            ],
 
+            "age": [
+                r"\bminha idade\b",
+                r"\bqual minha idade\b",
+                r"\bqual a minha idade\b",
+                r"\bquantos anos eu tenho\b",
+                r"\bquantos anos tenho\b",
+                r"\bquantos anos eu possuo\b",
+                r"\bvoce sabe minha idade\b",
+                r"\bvoce sabe qual minha idade\b",
+                r"\bvoce lembra minha idade\b",
+                r"\bvoce lembra qual minha idade\b"
             ],
 
             "game": [
-
                 r"\bmeu jogo\b",
                 r"\bqual meu jogo\b",
                 r"\bqual o meu jogo\b",
@@ -84,11 +84,9 @@ class MessageAnalyzer:
                 r"\bqual jogo\b",
                 r"\bvoce lembra qual jogo\b",
                 r"\bvoce sabe qual jogo\b"
-
             ],
 
             "animal": [
-
                 r"\bmeu animal\b",
                 r"\bqual meu animal\b",
                 r"\bqual o meu animal\b",
@@ -98,11 +96,9 @@ class MessageAnalyzer:
                 r"\bqual animal\b",
                 r"\bvoce lembra qual animal\b",
                 r"\bvoce sabe qual animal\b"
-
             ],
 
             "film": [
-
                 r"\bmeu filme\b",
                 r"\bqual meu filme\b",
                 r"\bqual o meu filme\b",
@@ -112,11 +108,9 @@ class MessageAnalyzer:
                 r"\bqual filme\b",
                 r"\bvoce lembra qual filme\b",
                 r"\bvoce sabe qual filme\b"
-
             ],
 
             "series": [
-
                 r"\bminha serie\b",
                 r"\bqual minha serie\b",
                 r"\bqual a minha serie\b",
@@ -124,11 +118,9 @@ class MessageAnalyzer:
                 r"\bserie preferida\b",
                 r"\bque serie\b",
                 r"\bqual serie\b"
-
             ],
 
             "music": [
-
                 r"\bminha musica\b",
                 r"\bqual minha musica\b",
                 r"\bqual a minha musica\b",
@@ -136,11 +128,9 @@ class MessageAnalyzer:
                 r"\bmusica preferida\b",
                 r"\bque musica\b",
                 r"\bqual musica\b"
-
             ],
 
             "preference": [
-
                 r"\bminha preferencia\b",
                 r"\bqual minha preferencia\b",
                 r"\bqual a minha preferencia\b",
@@ -148,9 +138,7 @@ class MessageAnalyzer:
                 r"\bvoce lembra a minha preferencia\b",
                 r"\bvoce sabe minha preferencia\b",
                 r"\bvoce sabe a minha preferencia\b"
-
             ]
-
         }
 
         # =====================================
@@ -158,7 +146,6 @@ class MessageAnalyzer:
         # =====================================
 
         self.question_words = {
-
             "qual",
             "que",
             "como",
@@ -166,8 +153,8 @@ class MessageAnalyzer:
             "quem",
             "quando",
             "porque",
-            "por que"
-
+            "por que",
+            "quantos"
         }
 
         # =====================================
@@ -184,45 +171,34 @@ class MessageAnalyzer:
         self.short_question_subjects = {
 
             "game": [
-
                 "e o jogo",
                 "e jogo",
                 "jogo"
-
             ],
 
             "animal": [
-
                 "e o animal",
                 "e animal",
                 "animal"
-
             ],
 
             "film": [
-
                 "e o filme",
                 "e filme",
                 "filme"
-
             ],
 
             "series": [
-
                 "e a serie",
                 "e serie",
                 "serie"
-
             ],
 
             "music": [
-
                 "e a musica",
                 "e musica",
                 "musica"
-
             ]
-
         }
 
     # =====================================
@@ -235,12 +211,9 @@ class MessageAnalyzer:
     ):
 
         if not message:
-
             return {
-
                 "intent": IntentTypes.UNKNOWN,
                 "subject": None
-
             }
 
         normalized = self.normalize(
@@ -277,7 +250,6 @@ class MessageAnalyzer:
         # =================================
 
         if subject is None:
-
             subject = semantic["subject"]
 
         # =================================
@@ -290,17 +262,9 @@ class MessageAnalyzer:
 
         # =================================
         # Pergunta curta por assunto
-        #
-        # Exemplo:
-        #
-        # "e o filme?"
-        #
-        # Não possui palavra interrogativa,
-        # mas semanticamente é uma consulta.
         # =================================
 
         if not question:
-
             question = self.is_short_subject_question(
                 normalized,
                 subject
@@ -317,15 +281,12 @@ class MessageAnalyzer:
             # =================================
 
             if intent == IntentTypes.ASK_AI_NAME:
-
                 pass
 
             elif intent == IntentTypes.ASK_AI_VERSION:
-
                 pass
 
             elif intent == IntentTypes.ASK_AI_LANGUAGE:
-
                 pass
 
             # =================================
@@ -340,29 +301,24 @@ class MessageAnalyzer:
                 "music",
                 "preference"
             ):
-
                 intent = IntentTypes.ASK_USER_PREFERENCE
 
             elif subject in (
                 "origin",
-                "height"
+                "height",
+                "age"
             ):
-
                 intent = IntentTypes.ASK_USER_FACT
 
             elif subject == "city":
-
                 intent = IntentTypes.ASK_USER_CITY
 
             elif subject == "name":
-
                 intent = IntentTypes.ASK_USER_NAME
 
         return {
-
             "intent": intent,
             "subject": subject
-
         }
 
     # =====================================
@@ -382,7 +338,6 @@ class MessageAnalyzer:
                     pattern,
                     message
                 ):
-
                     return subject
 
         return None
@@ -405,7 +360,6 @@ class MessageAnalyzer:
         for word in self.question_words:
 
             if word in words:
-
                 return True
 
         return False
@@ -421,7 +375,6 @@ class MessageAnalyzer:
     ):
 
         if subject is None:
-
             return False
 
         patterns = self.short_question_subjects.get(
@@ -432,7 +385,6 @@ class MessageAnalyzer:
         for pattern in patterns:
 
             if message == pattern:
-
                 return True
 
         return False

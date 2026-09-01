@@ -8,13 +8,18 @@ class Brain:
     def __init__(self):
 
         self.last_thought = None
+
         self.message_analyzer = MessageAnalyzer()
 
     # =====================================
     # Processamento principal
     # =====================================
 
-    def think(self, message, manager):
+    def think(
+        self,
+        message,
+        manager
+    ):
 
         if not message:
             return None
@@ -104,7 +109,11 @@ class Brain:
 
                 intent = IntentTypes.ASK_USER_PREFERENCE
 
-            elif subject == "origin":
+            elif subject in (
+                "origin",
+                "height",
+                "age"
+            ):
 
                 intent = IntentTypes.ASK_USER_FACT
 
@@ -164,6 +173,8 @@ class Brain:
     # Último pensamento
     # =====================================
 
-    def get_last_thought(self):
+    def get_last_thought(
+        self
+    ):
 
         return self.last_thought

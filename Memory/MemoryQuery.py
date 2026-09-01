@@ -1,7 +1,10 @@
 
 class MemoryQuery:
 
-    def __init__(self, memory_manager):
+    def __init__(
+        self,
+        memory_manager
+    ):
 
         self.memory_manager = memory_manager
 
@@ -22,6 +25,7 @@ class MemoryQuery:
             "umas",
 
             "eu",
+
             "meu",
             "minha",
             "meus",
@@ -29,6 +33,7 @@ class MemoryQuery:
 
             "você",
             "voce",
+
             "seu",
             "sua",
             "seus",
@@ -48,16 +53,20 @@ class MemoryQuery:
 
             "é",
             "e",
+
             "que",
             "qual",
             "quais",
+
             "onde",
             "como",
             "quem",
             "quando",
+
             "por",
             "para",
             "sobre",
+
             "sou"
         }
 
@@ -136,6 +145,22 @@ class MemoryQuery:
             return self.query_origin()
 
         # =================================
+        # Altura
+        # =================================
+
+        if subject == "height":
+
+            return self.query_height()
+
+        # =================================
+        # Idade
+        # =================================
+
+        if subject == "age":
+
+            return self.query_age()
+
+        # =================================
         # Cidade
         # =================================
 
@@ -178,6 +203,26 @@ class MemoryQuery:
                     "type": "city",
                     "value": city
                 }
+
+        # =================================
+        # Idade
+        # =================================
+
+        if self.is_age_query(
+            normalized
+        ):
+
+            return self.query_age()
+
+        # =================================
+        # Altura
+        # =================================
+
+        if self.is_height_query(
+            normalized
+        ):
+
+            return self.query_height()
 
         # =================================
         # Preferências
@@ -237,10 +282,136 @@ class MemoryQuery:
         }
 
     # =====================================
+    # Consultar idade
+    # =====================================
+
+    def query_age(
+        self
+    ):
+
+        age = self.memory_manager.load(
+            "age"
+        )
+
+        if age is None:
+
+            return None
+
+        return {
+            "type": "age",
+            "value": age
+        }
+
+    # =====================================
+    # Detectar pergunta sobre idade
+    # =====================================
+
+    def is_age_query(
+        self,
+        message
+    ):
+
+        patterns = [
+
+            "qual minha idade",
+            "qual a minha idade",
+
+            "quantos anos eu tenho",
+            "quantos anos tenho",
+
+            "voce sabe minha idade",
+            "voce sabe qual minha idade",
+
+            "voce lembra minha idade",
+            "voce lembra qual minha idade"
+        ]
+
+        for pattern in patterns:
+
+            if pattern in message:
+
+                return True
+
+        return False
+
+    # =====================================
+    # Consultar altura
+    # =====================================
+
+    def query_height(
+        self
+    ):
+
+        facts = self.memory_manager.get_facts()
+
+        if not facts:
+
+            return None
+
+        for fact in reversed(facts):
+
+            if not isinstance(
+                fact,
+                str
+            ):
+
+                continue
+
+            fact_lower = fact.lower()
+
+            if fact_lower.startswith(
+                "eu tenho "
+            ) and "altura" in fact_lower:
+
+                return {
+                    "type": "fact",
+                    "value": fact
+                }
+
+        return None
+
+    # =====================================
+    # Detectar pergunta sobre altura
+    # =====================================
+
+    def is_height_query(
+        self,
+        message
+    ):
+
+        patterns = [
+
+            "qual minha altura",
+            "qual a minha altura",
+
+            "quanto eu tenho de altura",
+            "quanto tenho de altura",
+
+            "qual minha estatura",
+            "qual a minha estatura",
+
+            "voce sabe minha altura",
+            "voce sabe qual minha altura",
+
+            "voce lembra minha altura",
+            "voce lembra qual minha altura"
+        ]
+
+        for pattern in patterns:
+
+            if pattern in message:
+
+                return True
+
+        return False
+
+    # =====================================
     # Consultar cidade
     # =====================================
 
-    def query_city(self):
+    def query_city(
+        self
+    ):
 
         city = self.memory_manager.load(
             "city"
@@ -259,7 +430,9 @@ class MemoryQuery:
     # Consultar origem
     # =====================================
 
-    def query_origin(self):
+    def query_origin(
+        self
+    ):
 
         facts = self.memory_manager.get_facts()
 
@@ -268,6 +441,13 @@ class MemoryQuery:
             return None
 
         for fact in facts:
+
+            if not isinstance(
+                fact,
+                str
+            ):
+
+                continue
 
             fact_lower = fact.lower()
 
@@ -295,9 +475,12 @@ class MemoryQuery:
 
             "qual meu nome",
             "qual o meu nome",
+
             "como me chamo",
             "como eu me chamo",
+
             "voce lembra meu nome",
+
             "voce sabe meu nome",
             "voce sabe o meu nome"
         ]
@@ -323,10 +506,13 @@ class MemoryQuery:
 
             "onde moro",
             "onde eu moro",
+
             "qual minha cidade",
             "qual a minha cidade",
+
             "em que cidade moro",
             "em que cidade eu moro",
+
             "voce lembra onde moro",
             "voce sabe onde moro"
         ]
@@ -468,6 +654,13 @@ class MemoryQuery:
 
             for fact in reversed(facts):
 
+                if not isinstance(
+                    fact,
+                    str
+                ):
+
+                    continue
+
                 fact_lower = fact.lower()
 
                 if fact_lower.startswith(
@@ -495,6 +688,13 @@ class MemoryQuery:
         best_score = 0
 
         for fact in facts:
+
+            if not isinstance(
+                fact,
+                str
+            ):
+
+                continue
 
             fact_words = self.extract_keywords(
                 fact

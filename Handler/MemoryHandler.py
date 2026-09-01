@@ -1,10 +1,13 @@
-
 from Brain.IntentTypes import IntentTypes
 
 
 class MemoryHandler:
 
-    def process(self, context, manager):
+    def process(
+        self,
+        context,
+        manager
+    ):
 
         intent = context.get(
             "intent"
@@ -26,10 +29,12 @@ class MemoryHandler:
         # =====================================
 
         if intent in (
+
             IntentTypes.ASK_USER_NAME,
             IntentTypes.ASK_USER_CITY,
             IntentTypes.ASK_USER_FACT,
             IntentTypes.ASK_USER_PREFERENCE
+
         ):
 
             return self.query_memory(
@@ -116,6 +121,16 @@ class MemoryHandler:
             )
 
         # =================================
+        # Idade
+        # =================================
+
+        if result_type == "age":
+
+            return (
+                f"Você tem {value} anos."
+            )
+
+        # =================================
         # Fato
         # =================================
 
@@ -150,7 +165,24 @@ class MemoryHandler:
     # Formatar fato
     # =====================================
 
-    def format_fact(self, fact):
+    def format_fact(
+        self,
+        fact
+    ):
+
+        # =================================
+        # Proteção contra valores que não
+        # sejam texto
+        # =================================
+
+        if not isinstance(
+            fact,
+            str
+        ):
+
+            return str(
+                fact
+            )
 
         fact_lower = fact.lower()
 
@@ -319,16 +351,16 @@ class MemoryHandler:
     # Extração do nome
     # =====================================
 
-    def extract_name(self, message):
+    def extract_name(
+        self,
+        message
+    ):
 
         prefixes = [
 
             "meu nome é",
-
             "meu nome e",
-
             "me chamo",
-
             "pode me chamar de"
         ]
 
@@ -352,7 +384,6 @@ class MemoryHandler:
                 )
 
                 if name:
-
                     return name
 
         return None
