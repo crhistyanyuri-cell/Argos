@@ -296,6 +296,7 @@ class MemoryQuery:
             "qual meu nome",
             "qual o meu nome",
             "como me chamo",
+            "como eu me chamo",
             "voce lembra meu nome",
             "voce sabe meu nome",
             "voce sabe o meu nome"
@@ -450,6 +451,37 @@ class MemoryQuery:
         if not facts:
 
             return None
+
+        # =================================
+        # Pergunta genérica:
+        #
+        # "o que eu tenho?"
+        #
+        # Nesse caso, procurar primeiro
+        # o fato "eu tenho ..." mais recente.
+        # =================================
+
+        if (
+            "tenho" in message
+            and "o que" in message
+        ):
+
+            for fact in reversed(facts):
+
+                fact_lower = fact.lower()
+
+                if fact_lower.startswith(
+                    "eu tenho "
+                ):
+
+                    return {
+                        "type": "fact",
+                        "value": fact
+                    }
+
+        # =================================
+        # Consulta normal por palavras-chave
+        # =================================
 
         query_words = self.extract_keywords(
             message

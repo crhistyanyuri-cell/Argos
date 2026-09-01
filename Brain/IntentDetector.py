@@ -31,19 +31,19 @@ class IntentDetector:
 
             IntentTypes.ASK_AI_NAME: [
                 r"\bseu nome\b",
-                r"qual.*seu nome",
-                r"como.*chama",
-                r"quem.*e voce"
+                r"qual.*\bseu nome",
+                r"como.*\bchama",
+                r"quem.*\be voce"
             ],
 
             IntentTypes.ASK_AI_VERSION: [
-                r"qual.*versao",
+                r"qual.*\bversao",
                 r"que versao"
             ],
 
             IntentTypes.ASK_AI_LANGUAGE: [
-                r"qual.*idioma",
-                r"qual.*lingua",
+                r"qual.*\bidioma",
+                r"qual.*\blingua",
                 r"que idioma"
             ],
 
@@ -59,18 +59,18 @@ class IntentDetector:
 
             IntentTypes.ASK_USER_NAME: [
                 r"\bmeu nome\b",
-                r"qual.*meu nome",
-                r"como.*me chamo",
-                r"voce lembra.*meu nome"
+                r"qual.*\bmeu nome",
+                r"como.*\bme chamo",
+                r"voce lembra.*\bmeu nome"
             ],
 
             IntentTypes.ASK_USER_CITY: [
-                r"onde.*moro",
-                r"onde.*eu moro",
-                r"qual.*minha cidade",
-                r"em que cidade.*moro",
-                r"em que cidade.*eu moro",
-                r"voce lembra.*onde.*moro"
+                r"onde.*\bmoro",
+                r"onde.*\beu moro",
+                r"qual.*\bminha cidade",
+                r"em que cidade.*\bmoro",
+                r"em que cidade.*\beu moro",
+                r"voce lembra.*\bonde.*\bmoro"
             ],
 
             # =====================================
@@ -78,11 +78,11 @@ class IntentDetector:
             # =====================================
 
             IntentTypes.ASK_USER_FACT: [
-                r"de onde.*sou",
-                r"de onde.*eu sou",
-                r"de onde.*venho",
-                r"qual.*minha origem",
-                r"voce lembra.*de onde.*sou"
+                r"de onde.*\bsou",
+                r"de onde.*\beu sou",
+                r"de onde.*\bvenho",
+                r"qual.*\bminha origem",
+                r"voce lembra.*\bde onde.*\bsou"
             ],
 
             # =====================================
@@ -90,12 +90,12 @@ class IntentDetector:
             # =====================================
 
             IntentTypes.ASK_USER_PREFERENCE: [
-                r"qual.*meu.*favorito",
-                r"qual.*meu.*favorita",
-                r"qual.*minha.*preferencia",
-                r"voce lembra.*meu.*favorito",
-                r"voce lembra.*minha.*preferencia"
-],
+                r"qual.*\bmeu.*\bfavorito",
+                r"qual.*\bmeu.*\bfavorita",
+                r"qual.*\bminha.*\bpreferencia",
+                r"voce lembra.*\bmeu.*\bfavorito",
+                r"voce lembra.*\bminha.*\bpreferencia"
+            ],
 
             # =====================================
             # Aprendizado
@@ -106,8 +106,8 @@ class IntentDetector:
                 r"eu gosto",
                 r"eu prefiro",
                 r"minha preferencia e",
-                r"meu .* favorito e",
-                r"minha .* favorita e"
+                r"meu *.*\b favorito e",
+                r"minha *.*\b favorita e"
             ],
 
             IntentTypes.LEARN_FACT: [
@@ -118,48 +118,26 @@ class IntentDetector:
             ]
         }
 
-    # =====================================
-    # Detectar intenção
-    # =====================================
-
     def detect(self, message):
 
         if not message:
-
             return IntentTypes.UNKNOWN
 
-        message = self.normalize(
-            message
-        )
+        message = self.normalize(message)
 
         for intent, patterns in self.patterns.items():
 
             for pattern in patterns:
 
-                if re.search(
-                    pattern,
-                    message
-                ):
-
+                if re.search(pattern, message):
                     return intent
 
         return IntentTypes.UNKNOWN
 
-    # =====================================
-    # Normalização
-    # =====================================
-
     def normalize(self, message):
 
-        message = str(
-            message
-        )
-
+        message = str(message)
         message = message.lower().strip()
-
-        # =================================
-        # Remover acentos
-        # =================================
 
         message = unicodedata.normalize(
             "NFD",
@@ -172,19 +150,11 @@ class IntentDetector:
             if unicodedata.category(char) != "Mn"
         )
 
-        # =================================
-        # Remover pontuação
-        # =================================
-
         message = re.sub(
             r"[!?.,;:]",
             "",
             message
         )
-
-        # =================================
-        # Normalizar espaços
-        # =================================
 
         message = re.sub(
             r"\s+",

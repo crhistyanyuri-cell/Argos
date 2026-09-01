@@ -1,29 +1,41 @@
 from Core.ModuleManager import ModuleManager
 
 from Config.Config import Config
+
 from Logger.Logger import Logger
 
 from Memory.Memory import Memory
+
 from Memory.MemoryManager import MemoryManager
+
 from Memory.MemoryQuery import MemoryQuery
 
 from Context.ContextManager import ContextManager
 
 from Learning.Learning import Learning
+
 from Learning.LearningManager import LearningManager
 
 from Handler.HandlerManager import HandlerManager
+
 from Handler.GreetingHandler import GreetingHandler
+
 from Handler.IdentityHandler import IdentityHandler
+
 from Handler.MemoryHandler import MemoryHandler
+
 from Handler.LearningHandler import LearningHandler
+
 from Handler.QuestionHandler import QuestionHandler
 
 from Input.InputManager import InputManager
 
 from Commands.CommandProcessor import CommandProcessor
+
 from Commands.HelpCommand import HelpCommand
+
 from Commands.MemoryCommand import MemoryCommand
+
 from Commands.ExitCommand import ExitCommand
 
 from Brain.Brain import Brain
@@ -153,15 +165,10 @@ class Bootstrap:
     def register_handler_modules(self):
 
         handlers = [
-
             GreetingHandler(),
-
             IdentityHandler(),
-
             MemoryHandler(),
-
             LearningHandler(),
-
             QuestionHandler()
         ]
 

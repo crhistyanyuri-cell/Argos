@@ -5,19 +5,27 @@ class IdentityHandler:
 
     def process(self, context, manager):
 
-        intent = context.get("intent")
+        intent = context.get(
+            "intent"
+        )
 
         if intent == IntentTypes.ASK_AI_NAME:
 
-            return self.get_name(manager)
+            return self.get_name(
+                manager
+            )
 
         if intent == IntentTypes.ASK_AI_VERSION:
 
-            return self.get_version(manager)
+            return self.get_version(
+                manager
+            )
 
         if intent == IntentTypes.ASK_AI_LANGUAGE:
 
-            return self.get_language(manager)
+            return self.get_language(
+                manager
+            )
 
         return None
 
@@ -27,11 +35,16 @@ class IdentityHandler:
 
     def get_name(self, manager):
 
-        config = manager.get("config")
+        config = manager.get(
+            "config"
+        )
 
         if config is None:
 
-            return "Não consegui acessar minhas configurações."
+            return (
+                "Não consegui acessar "
+                "minhas configurações."
+            )
 
         return f"Meu nome é {config.name}."
 
@@ -41,11 +54,16 @@ class IdentityHandler:
 
     def get_version(self, manager):
 
-        config = manager.get("config")
+        config = manager.get(
+            "config"
+        )
 
         if config is None:
 
-            return "Não consegui acessar minhas configurações."
+            return (
+                "Não consegui acessar "
+                "minhas configurações."
+            )
 
         return f"Estou na versão {config.version}."
 
@@ -55,10 +73,15 @@ class IdentityHandler:
 
     def get_language(self, manager):
 
-        config = manager.get("config")
+        config = manager.get(
+            "config"
+        )
 
         if config is None:
 
-            return "Não consegui acessar minhas configurações."
+            return (
+                "Não consegui acessar "
+                "minhas configurações."
+            )
 
         return f"Meu idioma principal é {config.language}."

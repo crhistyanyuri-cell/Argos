@@ -1,3 +1,4 @@
+
 from Brain.IntentTypes import IntentTypes
 
 
@@ -72,12 +73,12 @@ class MemoryHandler:
 
         subject = context.get(
             "subject"
-)
+        )
 
         result = memory_query.query(
             message,
             subject
-)
+        )
 
         if result is None:
 
@@ -183,6 +184,22 @@ class MemoryHandler:
 
             return (
                 f"Você mora em {place}."
+            )
+
+        # =================================
+        # Posse / "eu tenho"
+        # =================================
+
+        if fact_lower.startswith(
+            "eu tenho "
+        ):
+
+            content = fact[
+                len("eu tenho "):
+            ].strip()
+
+            return (
+                f"Você tem {content}."
             )
 
         # =================================

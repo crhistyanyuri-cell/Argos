@@ -1,5 +1,5 @@
-
 from Brain.MessageAnalyzer import MessageAnalyzer
+
 from Brain.IntentTypes import IntentTypes
 
 
@@ -59,7 +59,11 @@ class Brain:
             message
         )
 
+        if analysis is None:
+            return "Ainda estou aprendendo."
+
         intent = analysis["intent"]
+
         subject = analysis["subject"]
 
         # =================================
@@ -75,6 +79,7 @@ class Brain:
             and semantic["context_reference"]
             and previous_subject is not None
         ):
+
             subject = previous_subject
 
         # =================================
@@ -82,7 +87,11 @@ class Brain:
         # assunto
         # =================================
 
-        if semantic["question"] and subject is not None:
+        if (
+            intent == IntentTypes.UNKNOWN
+            and semantic["question"]
+            and subject is not None
+        ):
 
             if subject in (
                 "game",
@@ -92,6 +101,7 @@ class Brain:
                 "music",
                 "preference"
             ):
+
                 intent = IntentTypes.ASK_USER_PREFERENCE
 
             elif subject == "origin":
